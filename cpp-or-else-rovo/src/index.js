@@ -21,13 +21,13 @@ export async function fetchFile(payload) {
     const result = await Promise.all(
         data.results.map(async (page) => {
             const pageResponse = await api.asUser().requestConfluence(route`/wiki/api/v2/pages/${page.id}?body-format=atlas_doc_format`, {
-            headers: {
-                'Accept': 'application/json'  // Fix typo here
-            }
+                headers: {
+                    'Accept': 'application/json'  // Fix typo here
+                }
             });
             return pageResponse.json();  // Await JSON parsing
         })
-        );
+    );
     
-        return result
+    return result
 }
