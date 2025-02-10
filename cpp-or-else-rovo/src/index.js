@@ -1,3 +1,4 @@
-export function messageLogger(payload){ 
-    console.log(`Logging message: ${payload.message}`);
+export function messageLogger(payload) {
+  console.log(`Logging message: ${payload.message}`);
 }
+export function fetchFile(payload) {}

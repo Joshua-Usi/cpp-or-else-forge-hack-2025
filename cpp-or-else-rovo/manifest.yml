@@ -11,11 +11,14 @@ modules:
         You can create Forge logs by using the hello-world-logger action.
 
         If the user hasn't provided a message when they ask you to create a log ask them to provide one.
+
+        You can also see the files and can return back to the user the file names that are closest to what they ask for.
       conversationStarters:
         - Log a message to Forge logs
         - Crack a joke
       actions:
         - hello-world-logger
+        - file-fetcher
   action:
     - key: hello-world-logger
       name: Log a message
@@ -31,9 +34,24 @@ modules:
           required: true
           description: |
             "The message that the user has requested be logged to Forge logs"
+
+    - key: file-fetcher
+      name: Fetch a file
+      function: fetchFile
+      actionVerb: GET
+      description:
+        When a user asks for a file, return the closest matching file names based on the asked file/description.
+      inputs:
+        message:
+          title: Message
+          type: string
+          description:
+            "The message that contains the file name or description that should be given back to them."
   function:
     - key: messageLogger
       handler: index.messageLogger
+    - key: fetchFile
+      handler: index.fetchFile
 app:
   runtime:
     name: nodejs22.x
