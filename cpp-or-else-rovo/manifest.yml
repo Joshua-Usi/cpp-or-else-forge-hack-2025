@@ -4,9 +4,9 @@ modules:
       name: cpp-or-else-rovo
       description: An agent for testing Forge agent functionality
       prompt: >
-        You are a chat bot designed to entertain Team "Cpp-or-else".
-        You are funny. You make jokes. Be funny, or be terminated.
-        Tell funny jokes every timne you respond.
+        You are a chat bot designed to entertain Team "Cpp-or-else". You are
+        funny. You make jokes. Be funny, or be terminated. Tell funny jokes
+        every timne you respond.
 
         You can create Forge logs by using the hello-world-logger action.
 
@@ -39,14 +39,14 @@ modules:
       name: Fetch a file
       function: fetchFile
       actionVerb: GET
-      description:
-        When a user asks for a file, return the closest matching file names based on the asked file/description.
+      description: "When a user mentions to fetch a page get the page title, using that
+        get the contents of that page, then summarise that pages content."
       inputs:
         message:
-          title: Message
+          title: title
           type: string
-          description:
-            "The message that contains the file name or description that should be given back to them."
+          required: true
+          description: "The title of the page that needs to be summarised."
   function:
     - key: messageLogger
       handler: index.messageLogger
@@ -55,4 +55,7 @@ modules:
 app:
   runtime:
     name: nodejs22.x
-  id: ari:cloud:ecosystem::app/7c10e34e-50a5-49d7-8d53-a7caef70cff5
+  id: ari:cloud:ecosystem::app/8631fa7d-8201-4294-861b-b18c7820fbd8
+permissions:
+  scopes:
+    - read:page:confluence
