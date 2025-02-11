@@ -1,40 +1,161 @@
 modules:
   rovo:agent:
-    - key: cpp-or-else-rovo-hello-world-agent
-      name: cpp-or-else-rovo
-      description: An agent for testing Forge agent functionality
+    - key: fetch
+      name: Fetch
+      description: Never lose track—Fetch finds what matters, when it matters.
       prompt: >
-        You are a chat bot designed to entertain Team "Cpp-or-else".
-        You are funny. You make jokes. Be funny, or be terminated.
-        Tell funny jokes every timne you respond.
+        You are Fetch, a personalised and helpful AI assistant designed to
+        optimize code reviews, keep documentation fresh, and automatically
+        detect stale information. You pull context from Jira, Confluence, and
+        code repositories. Stay direct, concise, and professional. If uncertain,
+        politely ask clarifying questions or provide options. Focus on
+        summarizing code changes, automating documentation, and flagging
+        outdated items. Always provide helpful references from Jira or
+        Confluence where possible.
 
-        You can create Forge logs by using the hello-world-logger action.
-
-        If the user hasn't provided a message when they ask you to create a log ask them to provide one.
+        Use memories about users to personalise and adjust responses.
       conversationStarters:
-        - Log a message to Forge logs
-        - Crack a joke
+        - Fetch the latest PRs that need attention.
+        - Fetch a draft for this bug fix's release notes.
+        - Fetch outdated tickets or docs that need cleaning up.
       actions:
-        - hello-world-logger
+        - file-fetcher
+        - fetch-recent-pages
+        - summarize-code-review
+        - auto-generate-documentation
+        - detect-stale-information
   action:
-    - key: hello-world-logger
-      name: Log a message
-      function: messageLogger
+    # Personalisation
+    - key: get-user-name
+      name: Get UserName
+      function: getUserName
       actionVerb: GET
       description: >
-        When a user asks to log a message, this action logs the message to the
-        Forge logs.
+        Fetch the name of the user currently being talked to. Use it to greet
+        them personally. If the name was not found, greet them generically.
+
+    - key: file-fetcher
+      name: Fetch a Confluence page
+      function: fetchFile
+      actionVerb: GET
+      description: Retrieve the title and contents of a specified Confluence page and
+        provide a concise summary a couple of sentences long. If the page is
+        unavailable, inform the user and suggest and present a related document.
+        Include a title field in your payload command
       inputs:
-        message:
-          title: Message
+        title:
+          title: Page Title
           type: string
           required: true
-          description: |
-            "The message that the user has requested be logged to Forge logs"
+          description: The title of the page to be summarized.
+
+    - key: fetch-recent-pages
+      name: Fetch the 5 most recently edited pages
+      function: fetchRecentPages
+      actionVerb: GET
+      description: Fetches the recently edited Confluence page titles and presents
+        them to the user. If the user does not specify a count, assume 5.
+      inputs:
+        count:
+          title: Item count
+          type: integer
+          required: true
+          description: The number of items to select
+
+    - key: summarize-code-review
+      name: Summarize Code Review
+      function: summarizePullRequest
+      actionVerb: GET
+      description: >
+        Provide a concise summary of recent pull requests or commits,
+        highlighting major changes, possible risks, and security concerns.
+      inputs:
+        repoUrl:
+          title: Repository URL
+          type: string
+          required: true
+          description: The repository to fetch commits from.
+
+    - key: auto-generate-documentation
+      name: Auto-generate Documentation
+      function: generateDocumentation
+      actionVerb: GET
+      description: >
+        Suggest or pre-fill documentation templates based on recent work items,
+        bug fixes, or tasks in Jira. Optionally link to existing Confluence
+        pages. Use generic placeholders for names like [NAME] unless asked
+        otherwise.
+      inputs:
+        issueKey:
+          title: Jira Issue Key
+          type: string
+          required: true
+          description: Reference the Jira issue to help generate documentation.
+
+    - key: detect-stale-information
+      name: Detect Stale Information
+      function: findStaleInformation
+      actionVerb: GET
+      description: >
+        Identify stale or duplicated documentation/tickets based on last update
+        date or user-specified threshold. Provide suggestions for merging or
+        removal. If not specified, default to 30 days as old
+      inputs:
+        daysOld:
+          title: Stale if older than (days)
+          type: integer
+          required: true
+          description: Threshold for detecting stale items.
+
+    - key: create-page
+      name: Create Page
+      function: createPage
+      actionVerb: GET
+      description: >
+        Create a confluence page using the conversational context. Fill in title and body sections.
+      inputs:
+        title:
+          title: Document title
+          type: string
+          required: true
+          description: Title for the new page.
+        body:
+          title: Body
+          type: string
+          required: true
+          description: Body text for the document
   function:
-    - key: messageLogger
-      handler: index.messageLogger
+    - key: getUserName
+      handler: index.getUserName
+
+    - key: fetchFile
+      handler: index.fetchFile
+
+    - key: fetchRecentPages
+      handler: index.fetchRecentPages
+
+    - key: summarizePullRequest
+      handler: index.summarizePullRequest
+
+    - key: generateDocumentation
+      handler: index.generateDocumentation
+
+    - key: findStaleInformation
+      handler: index.findStaleInformation
+
+    - key: create-page
+      handler: index.createPage
+
 app:
   runtime:
     name: nodejs22.x
-  id: ari:cloud:ecosystem::app/7c10e34e-50a5-49d7-8d53-a7caef70cff5
+  id: ari:cloud:ecosystem::app/a30e3964-11c8-45cf-b65e-8c221c5f9452
+
+permissions:
+  scopes:
+    - read:page:confluence
+    - read:confluence-content.summary
+    - search:confluence
+    - read:jira-work
+    - read:jira-user
+    - write:confluence-content
