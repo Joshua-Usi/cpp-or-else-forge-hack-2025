@@ -92,6 +92,13 @@ modules:
       actionVerb: GET
       description: >
         Fetch all the files in current confluence site
+      inputs: 
+        keyword:
+          title: keyword
+          type: string
+          required: false
+          description: |
+            the keyword of what the user wants you to look into
   function:
     - key: fetchAllFiles
       handler: datahandler.fetchAllFiles
@@ -101,7 +108,7 @@ modules:
 app:
   runtime:
     name: nodejs22.x
-  id: ari:cloud:ecosystem::app/d9c81822-a7c9-4193-b41f-f5eb15ed0419
+  id: ari:cloud:ecosystem::app/e453667e-ddd0-4651-96af-f3fa18793696
 
 permissions:
   scopes:
