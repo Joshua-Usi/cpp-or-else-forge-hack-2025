@@ -106,6 +106,24 @@ modules:
           type: integer
           required: true
           description: Threshold for detecting stale items.
+
+    - key: create-page
+      name: Create Page
+      function: createPage
+      actionVerb: GET
+      description: >
+        Create a confluence page using the conversational context. Fill in title and body sections.
+      inputs:
+        title:
+          title: Document title
+          type: string
+          required: true
+          description: Title for the new page.
+        body:
+          title: Body
+          type: string
+          required: true
+          description: Body text for the document
   function:
     - key: getUserName
       handler: index.getUserName
@@ -125,6 +143,9 @@ modules:
     - key: findStaleInformation
       handler: index.findStaleInformation
 
+    - key: create-page
+      handler: index.createPage
+
 app:
   runtime:
     name: nodejs22.x
@@ -137,3 +158,4 @@ permissions:
     - search:confluence
     - read:jira-work
     - read:jira-user
+    - write:confluence-content

@@ -153,7 +153,7 @@ export async function findStaleInformation(payload) {
 }
 
 export async function getUserName() {
-console.log("Payload for stale detection:", payload);
+    console.log("Payload for stale detection:", payload);
     try {
         const response = await api.asUser().requestConfluence(route`/rest/api/3/myself`);
         const data = await response.json();
@@ -166,4 +166,44 @@ console.log("Payload for stale detection:", payload);
         console.error('Error fetching user information:', error);
         return { body: 'Could not find user, greet generically.' };
     }
+}
+
+export async function createPage(payload, context) {
+    const { title, body } = payload.inputs;
+
+    // Define the space key where the page will be created
+    const spaceKey = 'YOUR_SPACE_KEY'; // Replace with your target space key
+
+    // Construct the body of the new page
+    const pageData = {
+        type: 'page',
+        title: title,
+        space: { key: spaceKey },
+        body: {
+            storage: {
+                value: body,
+                representation: 'storage',
+            },
+        },
+    };
+
+    // Make the API request to create the page
+    const response = await api.asUser().requestConfluence(route`/wiki/rest/api/content`, {
+        method: 'POST',
+        body: JSON.stringify(pageData),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error(`Failed to create page: ${errorMessage}`);
+        return { success: false, message: 'Failed to create page.' };
+    }
+
+    const responseData = await response.json();
+    const pageUrl = `https://${CONFLUENCE_INSTANCE}/wiki${responseData._links.webui}`;
+
+    return { success: true, message: `Page created successfully: ${pageUrl}` };
 }
