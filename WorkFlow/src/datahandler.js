@@ -1,4 +1,5 @@
-import api, { route } from '@forge/api'
+
+import api, { route } from '@forge/api';
 
 export async function fetchAllIssues(payload) {
   console.log(payload.keyword);
@@ -10,17 +11,22 @@ export async function fetchAllIssues(payload) {
 
     console.log('Issues JSON Response:', issuesJson);
 
-    // If a keyword is provided, filter the results.
-    let filteredIssues = issuesJson.issues;
+    let filteredIssues = issuesJson.issues || [];
 
     if (payload.keyword) {
       const lowerKeyword = payload.keyword.toLowerCase();
-      filteredIssues = filteredIssues.filter(
-        issue =>
-          issue.summary?.toLowerCase().includes(lowerKeyword) ||
-          issue.description?.content[0].content[0].text.toLowerCase().includes(lowerKeyword) ||
-          issue.description.type.toLowerCase().includes(lowerKeyword)
-      );
+
+      filteredIssues = filteredIssues.filter(issue => {
+        const summary = issue.summary ? issue.summary.toLowerCase() : '';
+        const descriptionType = issue.description?.type ? issue.description.type.toLowerCase() : '';
+
+        // Ensure description content is properly accessed
+        const descriptionText = issue.description?.content?.[0]?.content?.[0]?.text 
+          ? issue.description.content[0].content[0].text.toLowerCase() 
+          : '';
+
+        return summary.includes(lowerKeyword) || descriptionText.includes(lowerKeyword) || descriptionType.includes(lowerKeyword);
+      });
     }
 
     console.log('Filtered Issues:', filteredIssues);
@@ -31,3 +37,4 @@ export async function fetchAllIssues(payload) {
     throw error;
   }
 }
+
