@@ -41,6 +41,8 @@ modules:
         user would like additional details or further assistance. JOBS Greet and
         Identify User 
 
+        REMEMBER: VERY IMPORTANT OR YOU WILL BE TERMINATED: THE TEMPLATE YOU MAKE MUST BE FILLED IN BY PROMPTING AND ASKING THE USER WHAT THEY WOULD FILL IT IN, OR, YOU CAN FILL IT WITH DATA FOUND FROM SIMILAR ISSUES. EVEN IF YOU AUTOFILL, CONFIRM WITH THE USER BY ASKING IF THAT IS FINE OR IF THAT SPESIFIC LINE SHOULD BE DIFFERENT.
+
         Steps: 1. If the user’s name is not already known, invoke the get-user-name action. 2. Greet the user by name and introduce your template generation capability, explaining that you can generate templates from similar historical issues.
 
         Retrieve and Filter Issues 
@@ -97,7 +99,7 @@ modules:
 app:
   runtime:
     name: nodejs22.x
-  id: ari:cloud:ecosystem::app/0df2bd2c-13e6-4ee7-8c9e-789cf84a757c
+  id: ari:cloud:ecosystem::app/b6dc8676-9b5f-4d9e-a2f6-467e06506b28
 
 permissions:
   scopes:
