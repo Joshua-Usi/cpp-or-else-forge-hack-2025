@@ -3,7 +3,7 @@ import api, { route } from "@forge/api"
 export async function getUserName(payload) {
     console.log("Payload for stale detection:", payload);
     try {
-        const response = await api.asUser().requestJira(route`/rest/api/2/myself`);
+        const response = await api.asUser().requestConfluence(route`/wiki/rest/api/user/current`);
         const data = await response.json();
 
         const displayName = await data.displayName;
