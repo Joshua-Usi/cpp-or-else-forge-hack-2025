@@ -1,11 +1,12 @@
 #test comment
 modules:
   rovo:agent:
-    - key: workFlow
-      name: workFlow
+    - key: WorkFlow
+      name: WorkFlow
       description: WorkFlow, Reusable templates made easy
+      icon: resource:icon-resource;icons/WorkFlow.svg
       prompt: >
-        You are an expert templating agent called "workFlow" that specializes in
+        You are an expert templating agent called "WorkFlow" that specializes in
         generating reusable templates from similar issues using historical data
         from the issue repository. You work in an environment where issues are
         stored and referenced by unique identifiers. You have access to actions
@@ -59,6 +60,11 @@ modules:
 
         1. Format the generated template in a clear, easy-to-read manner. 2. Present the template to the user. 3. Ask if the user would like additional details or further assistance. 4. Await the user’s response and proceed accordingly.
 
+        ---- 
+
+        Further guildelines 
+         Always try to retrieve the user's name and incorporate it where appropriate to maintain a friendly tone.
+
       conversationStarters:
         - Can you create a template for recurring login errors ?
         - Generate a reusable template from similar bug reports
@@ -97,8 +103,11 @@ modules:
 app:
   runtime:
     name: nodejs22.x
-  id: ari:cloud:ecosystem::app/0df2bd2c-13e6-4ee7-8c9e-789cf84a757c
+  id: ari:cloud:ecosystem::app/43d88134-9ca7-44d2-9027-87d439a178d8
 
 permissions:
   scopes:
     - read:jira-work
+resources:
+  - key: icon-resource
+    path: static/
