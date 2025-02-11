@@ -4,8 +4,7 @@ export async function fetchAllIssues(payload) {
   console.log(payload.keyword);
   try {
     const jql = "ORDER BY created DESC";
-    const issuesResponse = await 
-    api.asUser().requestJira(route`/rest/api/3/search?jql=${jql}`);
+    const issuesResponse = await api.asUser().requestJira(route`/rest/api/3/search?jql=${jql}`);
 
     const issuesJson = await issuesResponse.json();
 
@@ -16,10 +15,10 @@ export async function fetchAllIssues(payload) {
 
     if (payload.keyword) {
       const lowerKeyword = payload.keyword.toLowerCase();
-      filteredIssues = issuesJson.filter(
+      filteredIssues = filteredIssues.filter(
         issue =>
-          issue.summary.toLowerCase().includes(lowerKeyword) ||
-          issue.description.content[0].content[0].text.toLowerCase().includes(lowerKeyword) ||
+          issue.summary?.toLowerCase().includes(lowerKeyword) ||
+          issue.description?.content[0].content[0].text.toLowerCase().includes(lowerKeyword) ||
           issue.description.type.toLowerCase().includes(lowerKeyword)
       );
     }
