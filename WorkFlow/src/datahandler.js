@@ -12,11 +12,11 @@ export async function fetchAllIssues(payload) {
     console.log('Issues JSON Response:', issuesJson);
 
     // If a keyword is provided, filter the results.
-    let filteredIssues = jsonIssues;
+    let filteredIssues = issuesJson.issues;
 
     if (payload.keyword) {
       const lowerKeyword = payload.keyword.toLowerCase();
-      filteredIssues = mappedIssues.filter(
+      filteredIssues = issuesJson.filter(
         issue =>
           issue.summary.toLowerCase().includes(lowerKeyword) ||
           issue.description.content[0].content[0].text.toLowerCase().includes(lowerKeyword) ||
