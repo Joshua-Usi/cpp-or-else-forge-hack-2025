@@ -13,16 +13,18 @@ export async function fetchAllIssues(payload) {
 
     let filteredIssues = issuesJson.issues || [];
 
+    console.log('filterdIssues :' ,filteredIssues);
+
     if (payload.keyword) {
       const lowerKeyword = payload.keyword.toLowerCase();
 
       filteredIssues = filteredIssues.filter(issue => {
-        const summary = issue.summary ? issue.summary.toLowerCase() : '';
-        const descriptionType = issue.description?.type ? issue.description.type.toLowerCase() : '';
+        const summary = issue.fields?.summary ? issue.fields.summary.toLowerCase() : '';
+        const descriptionType = issue.fields?.description?.type ? issue.fields.description.type.toLowerCase() : '';
 
         // Ensure description content is properly accessed
-        const descriptionText = issue.description?.content?.[0]?.content?.[0]?.text 
-          ? issue.description.content[0].content[0].text.toLowerCase() 
+        const descriptionText = issue.fields?.description?.content?.[0]?.content?.[0]?.text 
+          ? issue.fields.description.content[0].content[0].text.toLowerCase() 
           : '';
 
         return summary.includes(lowerKeyword) || descriptionText.includes(lowerKeyword) || descriptionType.includes(lowerKeyword);
